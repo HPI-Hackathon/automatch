@@ -1,6 +1,6 @@
 
 angular.module('automatch')
-  .directive('automatchSwipe', ['$swipe', '$timeout', function($swipe, $timeout) {
+  .directive('automatchSwipe', ['$timeout', function($timeout) {
     return {
       restrict: 'A',
       scope: {
