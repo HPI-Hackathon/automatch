@@ -1,3 +1,3 @@
 
-angular.module('automatch', ['ngTouch']);
+angular.module('automatch', []);
 

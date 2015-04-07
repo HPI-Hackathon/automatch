@@ -14,6 +14,15 @@ angular.module('automatch')
       return 'http://' + car.images[0] + '/_27.jpg';
     };
 
+    $scope.like = function like(car) {
+      console.log('Request like', car.id);
+      io.socket.put('/car/like/' + car.id);
+    };
+    $scope.dislike = function dislike(car) {
+      console.log('Request dislike', car.id);
+      io.socket.put('/car/dislike/' + car.id);
+    };
+
     CarProvider.setErrorCb(function(err) {
       // TODO make this fancy
       alert('Oh No! Something went wrong! Please reload the page.');

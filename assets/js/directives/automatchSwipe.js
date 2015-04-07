@@ -1,17 +1,26 @@
 
 angular.module('automatch')
-  .directive('automatchSwipe', ['$swipe', '$timeout', function($swipe, $timeout) {
+  .directive('automatchSwipe', ['$timeout', function($timeout) {
     return {
       restrict: 'A',
+      scope: {
+        like: '&',
+        dislike: '&',
+      },
       link: function($scope, $element, $attrs) {
-        var prev = { x: 0, y: 0 };
-        var x, y;
+        var prev, start;
+        var startTime;
+        var x = 0, y = 0, dx = 0, dy = 0, scale = 1;
         var disableAnimationTimeout;
 
+        var rotation = parseInt(Math.random() * 5);
+
         function applyPos() {
-          $element.css('transform', 'translate(' + x + 'px, ' + y + 'px) ' +
-                       'scale(' + scale + ')');
+          $element.css('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0) ' +
+                       'scale(' + scale + ') rotate(' + rotation + 'deg)');
         }
+
+        applyPos();
 
         function toggleTransitions(enable) {
           var duration = enable ? '150ms' : '0ms';
@@ -44,20 +53,33 @@ angular.module('automatch')
           $event.stopPropagation();
 
           var pos = getPos($event);
-          var dx = pos.x - prev.x;
-          var dy = pos.y - prev.y;
+          dx = pos.x - prev.x;
+          dy = pos.y - prev.y;
 
           x += dx;
           y += dy;
 
           applyPos();
 
+          startTime = +new Date();
           prev = pos;
         }
 
         function touchEnd($event) {
           $event.preventDefault();
           $event.stopPropagation();
+
+          var THRESHOLD = 1;
+
+          var deltaTime = +new Date() - startTime;
+
+          if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy / deltaTime) > THRESHOLD) {
+            console.log('SUCCESS');
+            if (dy < 0 && $scope.onlike)
+              $scope.like();
+            else if ($scope.ondislike)
+              $xcope.dislike();
+          }
 
           x = 0; y = 0; scale = 1.0;
           toggleTransitions(true);
@@ -75,9 +97,9 @@ angular.module('automatch')
           $event.preventDefault();
           $event.stopPropagation();
 
-          console.log($element);
           var offset = $element.offset();
-          prev = getPos($event);
+          prev = start = getPos($event);
+          startTime = +new Date();
 
           x = 0;
           y = 0;
