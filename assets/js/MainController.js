@@ -1,23 +1,22 @@
 
 angular.module('automatch')
-  .controller('MainController', ['$scope', 'CarProvider',
-              function($scope, CarProvider) {
+  .controller('MainController', ['$scope', 'CarProvider', function($scope, CarProvider) {
+    if (!localStorage.userId)
+      localStorage.userId = generateId();
 
-	if (! localStorage.userId)
-		localStorage.userId = generateId();
-		
-	/**
-	 * generates random string of characters
-	 */
-	function generateId () {
-		var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-		var str = '';
-		for (var i = 0; i < 32; i++){
-			str += chars[parseInt(Math.random() * chars.length)];
-		}
+    /**
+     * generates random string of characters
+     */
+    function generateId () {
+      var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+      var str = '';
+      for (var i = 0; i < 32; i++){
+	str += chars[parseInt(Math.random() * chars.length)];
+      }
 
-		return str;
-	}
+      return str;
+    }
+
     /**
      * positions the cards in the center of the screen in
      * a way that they fit the best possible
