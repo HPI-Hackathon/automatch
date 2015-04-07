@@ -24,6 +24,7 @@ angular.module('automatch')
      */
     function reposition() {
       var fullWidth = $(document.body).width();
+      var fullHeight = $(document.body).height();
       $scope.cardWidth = Math.min(fullWidth * 0.9, 600);
 
       $scope.cardX = fullWidth / 2 - $scope.cardWidth / 2;
