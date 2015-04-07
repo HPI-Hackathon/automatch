@@ -2,6 +2,24 @@
 angular.module('automatch')
   .controller('MainController', ['$scope', 'CarProvider',
               function($scope, CarProvider) {
+
+    /**
+     * positions the cards in the center of the screen in
+     * a way that they fit the best possible
+     */
+    function reposition() {
+      var fullWidth = $(document.body).width();
+      $scope.cardWidth = Math.min(fullWidth * 0.9, 600);
+
+      $scope.cardX = fullWidth / 2 - $scope.cardWidth / 2;
+
+      if (!$scope.$$phase)
+        $scope.$apply();
+    }
+
+    window.onresize = reposition;
+    reposition();
+
     /**
      * Returns a correctly formatted url for the image of a given car
      * @param Object car The car to take the image from
@@ -11,16 +29,42 @@ angular.module('automatch')
       return 'http://' + car.images[0] + '/_27.jpg';
     };
 
-    $scope.like = function like(car) {
-      console.log('Request like', car.id);
-      io.socket.put('/car/like/' + car.id);
-      $scope.cars.splice(0, 1);
+    $scope.action = 'dislike';
+
+    /**
+     * Plays the animation of the big button showing and hides it again
+     *
+     * @param String action Either like or dislike
+     */
+    $scope.showBigButton = function(action) {
+      $scope.action = action;
+      var $button = $('.big-button').show();
+      setTimeout(function() {
+        $button.hide();
+      }, 800);
     };
 
+    /**
+     * Send a request to like a car, remove it from the list
+     *
+     * @param Object car The car to like
+     */
+    $scope.like = function like(car) {
+      console.log('Request like', car.id);
+      $scope.action = 'like';
+      $scope.cars.splice(0, 1);
+      io.socket.put('/car/like/' + car.id);
+    };
+
+    /**
+     * Send a request to dislike a car, remove it from the list
+     *
+     * @param Object car The car to dislike
+     */
     $scope.dislike = function dislike(car) {
       console.log('Request dislike', car.id);
-      io.socket.put('/car/dislike/' + car.id);
       $scope.cars.splice(0, 1);
+      io.socket.put('/car/dislike/' + car.id);
     };
 
     CarProvider.setErrorCb(function(err) {

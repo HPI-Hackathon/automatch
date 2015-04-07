@@ -1,10 +1,16 @@
 
 <div ng-controller="MainController">
+  <div ng-style="{ 'background-color': action == 'like' ? 'green' : 'red' }"
+       class="big-button"
+       ng-class="{ 'icon-thumbs-up': action == 'like', 'icon-thumbs-down': action == 'dislike' }">
+  </div>
+
   <div automatch-swipe
      like="like(car)"
      dislike="dislike(car)"
+     notify="showBigButton(action)"
      class="card"
-     ng-style="{ 'z-index': $length - $index }"
+     ng-style="{ 'z-index': $length - $index, width: cardWidth, left: cardX }"
      ng-repeat="car in cars track by car.id">
     <div class="price-tag">{{ car.price }}</div>
     <div class="car-image" ng-style="{ 'background-image': 'url(' + getImage(car) + ')' }">
