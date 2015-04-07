@@ -9,14 +9,14 @@ angular.module('automatch')
 
       var burger = $(".burger", element);
 
-      var burgerToggle = true;
+      var burgerToggle = false;
 
 
 
       burger.on('mousedown', function(event) {
         // Prevent default dragging of selected content
         event.preventDefault();
-        burgerToggle = !burgerToggle;
+
 
         if (burgerToggle == false) {
           $(".automatchSidebar").animate({
@@ -28,6 +28,7 @@ angular.module('automatch')
               width: [ "200", "swing" ],
           }, 200, "linear", function() {});
         }
+        burgerToggle = !burgerToggle;
         $document.on('mouseup', burgerMouseup);
       });
 
