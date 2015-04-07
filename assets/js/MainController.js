@@ -4,6 +4,23 @@ angular.module('automatch')
               function($scope, CarProvider) {
 
     /**
+     * positions the cards in the center of the screen in
+     * a way that they fit the best possible
+     */
+    function reposition() {
+      var fullWidth = $(document.body).width();
+      $scope.cardWidth = Math.min(fullWidth * 0.9, 600);
+
+      $scope.cardX = fullWidth / 2 - $scope.cardWidth / 2;
+
+      if (!$scope.$$phase)
+        $scope.$apply();
+    }
+
+    window.onresize = reposition;
+    reposition();
+
+    /**
      * Returns a correctly formatted url for the image of a given car
      * @param Object car The car to take the image from
      * @return string The url to the image

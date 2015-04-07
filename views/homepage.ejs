@@ -10,7 +10,7 @@
      dislike="dislike(car)"
      notify="showBigButton(action)"
      class="card"
-     ng-style="{ 'z-index': $length - $index }"
+     ng-style="{ 'z-index': $length - $index, width: cardWidth, left: cardX }"
      ng-repeat="car in cars track by car.id">
     <div class="price-tag">{{ car.price }}</div>
     <div class="car-image" ng-style="{ 'background-image': 'url(' + getImage(car) + ')' }">
