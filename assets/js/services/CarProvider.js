@@ -16,7 +16,6 @@ angular.module('automatch')
         $http.get('http://m.mobile.de/svc/s/?vc=Car&psz=' + PAGE_SIZE + '&ps' + offset)
           .success(function(data) {
             offset += PAGE_SIZE;
-            console.log(data);
             resolve(data);
           })
           .error(errorCb);

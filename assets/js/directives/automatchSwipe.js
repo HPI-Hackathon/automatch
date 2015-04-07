@@ -69,6 +69,9 @@ angular.module('automatch')
         var $document = $(document);
 
         $element.bind('touchstart mousedown', function touchStart($event) {
+          if ($event.target.tagName.toLowerCase() === 'a')
+            return;
+
           $event.preventDefault();
           $event.stopPropagation();
 
