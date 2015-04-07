@@ -71,6 +71,9 @@ angular.module('automatch')
       $scope.action = 'like';
       $scope.cars.splice(0, 1);
       io.socket.put('/car/like/' + car.id);
+
+      if ($scope.cars.length < 1)
+	loadNewPage();
     };
 
     /**
@@ -82,6 +85,9 @@ angular.module('automatch')
       console.log('Request dislike', car.id);
       $scope.cars.splice(0, 1);
       io.socket.put('/car/dislike/' + car.id);
+
+      if ($scope.cars.length < 1)
+	loadNewPage();
     };
 
     CarProvider.setErrorCb(function(err) {
@@ -89,21 +95,25 @@ angular.module('automatch')
       alert('Oh No! Something went wrong! Please reload the page.');
     });
 
-    CarProvider.fetchPage().then(function(data) {
-      $scope.cars = data.items.filter(function(car) {
-        return car.numImages > 0;
-      }).map(function(car) {
-        return {
-          title: car.title,
-          category: car.category,
-          url: car.url,
-          id: car.id,
-          price: car.p,
-          images: car.images.map(function(image) {
-            return image.uri;
-          })
-        };
+    function loadNewPage() {
+      CarProvider.fetchPage().then(function(data) {
+	$scope.cars = data.items.filter(function(car) {
+	  return car.numImages > 0;
+	}).map(function(car) {
+	  return {
+	    title: car.title,
+	    category: car.category,
+	    url: car.url,
+	    id: car.id,
+	    price: car.p,
+	    images: car.images.map(function(image) {
+	      return image.uri;
+	    })
+	  };
+	});
       });
-    });
+    }
+
+    loadNewPage();
   }]);
 

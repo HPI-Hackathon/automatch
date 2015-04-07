@@ -1,7 +1,7 @@
 
 angular.module('automatch')
   .factory('CarProvider', ['$q', '$http', function($q, $http) {
-    var PAGE_SIZE = 30;
+    var PAGE_SIZE = 10;
     var errorCb = null;
     var maxResults = -1;
 
