@@ -7,19 +7,39 @@
   padding: 24px;
   margin: 100px auto;
   position: relative;
+  border-radius: 2px;
+
+  .car-title {
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    left: 0;
+    height: 44px;
+    background-color: rgba(50, 50, 50, 0.4);
+    padding: 10px;
+    width: 100%;
+    bottom: 0;
+  }
 
   .car-image {
     height: 300px;
+    position: relative;
     background-color: #333;
+    background-image: url(http://i.ebayimg.com/00/s/NTc2WDEwMjQ=/z/vAQAAOSw7aBVFVaG/$_27.jpg);
+    background-position: center;
+    background-size: cover;
   }
 
   .price-tag {
     transform: rotate(-15deg);
     padding: 8px;
+    z-index: 3;
     font-size: 18px;
     font-weight: bold;
     box-shadow: 0 3px 8px black;
     position: absolute;
+    top: 12px;
+    left: 12px;
     background-color: #F7BF16;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
     color: white;
