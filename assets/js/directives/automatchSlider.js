@@ -1,4 +1,4 @@
-angular.module('automatch',[]).directive('automatchSlider', ['$document', function($document) {
+angular.module('automatch').directive('automatchSlider', ['$document', function($document) {
   return {
   	restrict: 'E',
     template: '<div class="slider"><div class="handle-upper"></div><div class="range"></div><div class="handle-lower"></div></div>',

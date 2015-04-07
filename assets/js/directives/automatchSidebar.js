@@ -1,5 +1,6 @@
 angular.module('automatch')
-.directive('automatchSidebar', ['$swipe', '$timeout', function($swipe, $timeout) {
+.directive('automatchSidebar', ['$timeout', function($timeout) {
   return {
-  }
+  };
 }]);
+
