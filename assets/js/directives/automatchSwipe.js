@@ -6,6 +6,7 @@ angular.module('automatch')
       scope: {
         like: '&',
         dislike: '&',
+        notify: '&'
       },
       link: function($scope, $element, $attrs) {
         var prev, start;
@@ -96,7 +97,12 @@ angular.module('automatch')
           $document.unbind('touchend mouseup', touchEnd);
 
           if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy / deltaTime) > THRESHOLD) {
-            console.log('SUCCESS');
+            $scope.$apply(function() {
+              $scope.notify({
+                action: dy < 0 ? 'like' : 'dislike'
+              });
+            });
+
             if (dy < 0 && $scope.like)
               $scope.removeCar(true);
             else if ($scope.dislike)
