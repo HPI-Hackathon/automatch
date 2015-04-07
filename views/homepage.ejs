@@ -5,9 +5,9 @@
     <div class="car-image" ng-style="{ 'background-image': 'url(' + getImage(car) + ')' }">
       <div class="car-title">
         {{ car.title }}
-        <div class="buy-button">
       </div>
     </div>
+    <a ng-attr-href="{{ car.url }}" class="buy-button">BUY!</a>
   </div>
 </div>
 

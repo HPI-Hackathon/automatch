@@ -26,6 +26,7 @@ angular.module('automatch')
         return {
           title: car.title,
           category: car.category,
+          url: car.url,
           id: car.id,
           price: car.p,
           images: car.images.map(function(image) {
