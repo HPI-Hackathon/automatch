@@ -26,7 +26,8 @@ angular.module('automatch')
      * @return string The url to the image
      */
     $scope.getImage = function getImage(car) {
-      return 'http://' + car.images[0] + '/_27.jpg';
+      // use _27 for larger but significantly slower images
+      return 'http://' + car.images[0] + '/_8.jpg';
     };
 
     $scope.action = 'dislike';
