@@ -1,6 +1,11 @@
 
 angular.module('automatch')
   .directive('automatchSwipe', ['$timeout', function($timeout) {
+    $(document.body).bind('touchstart touchend touchmove', function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    });
+
     return {
       restrict: 'A',
       scope: {
