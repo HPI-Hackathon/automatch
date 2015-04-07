@@ -1,0 +1,32 @@
+.slider, .range{
+	width: 500px;
+    height: 7px;
+    display: block;
+}
+.handle-upper, .handle-lower {
+	background-color: green;
+	position: absolute;
+	cursor: pointer;
+	width: 15px;
+    height: 15px;
+    top: -4px;
+    border-radius: 15px;
+    z-index: 1;
+}
+
+.slider{
+	position: relative;
+    background-color: lightgrey;
+}
+
+.range{
+	position: absolute;
+    background-color: lightblue;
+}
+
+.handle-upper{
+	left: 497.5px;
+}
+.handle-lower{
+	left: -2.5px;
+}
