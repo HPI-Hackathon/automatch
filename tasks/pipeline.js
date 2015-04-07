@@ -25,6 +25,7 @@ var jsFilesToInject = [
   
   'js/dependencies/sails.io.js',
 
+  'vendor/jquery/jquery.js',
   'vendor/angular/angular.js',
   'vendor/**/*.js',
 

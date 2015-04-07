@@ -1,10 +1,10 @@
 
 <div ng-controller="MainController">
-  <div automatch-swipe class="card">
-    <div class="price-tag">{{ price }}€</div>
-    <div class="car-image">
+  <div automatch-swipe class="card" ng-repeat="car in cars track by car.id">
+    <div class="price-tag">{{ car.price }}</div>
+    <div class="car-image" ng-style="{ 'background-image': 'url(' + getImage(car) + ')' }">
       <div class="car-title">
-        {{ title }}
+        {{ car.title }}
         <div class="buy-button">
       </div>
     </div>
