@@ -12,8 +12,13 @@
         {{ car.title }}
       </div>
     </div>
-    <a ng-show="$index == 0" ng-attr-href="{{ car.url }}" class="icon-money-1 buy-button"> BUY!</a>
-    <div class="fav-button icon-heart"></div>
+    <a ng-show="$index == 0"
+       ng-attr-href="{{ car.url }}"
+       class="icon-money-1 buy-button"> BUY!</a>
+
+    <div ng-show="$index == 0"
+       class="fav-button icon-heart"></div>
+
   </div>
   <div class="sidebar">
     <ul>

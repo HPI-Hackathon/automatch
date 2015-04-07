@@ -2,9 +2,6 @@
 angular.module('automatch')
   .controller('MainController', ['$scope', 'CarProvider',
               function($scope, CarProvider) {
-    $scope.price = 400;
-    $scope.title = 'BMW Dings Kaputt';
-
     /**
      * Returns a correctly formatted url for the image of a given car
      * @param Object car The car to take the image from
@@ -17,10 +14,13 @@ angular.module('automatch')
     $scope.like = function like(car) {
       console.log('Request like', car.id);
       io.socket.put('/car/like/' + car.id);
+      $scope.cars.splice(0, 1);
     };
+
     $scope.dislike = function dislike(car) {
       console.log('Request dislike', car.id);
       io.socket.put('/car/dislike/' + car.id);
+      $scope.cars.splice(0, 1);
     };
 
     CarProvider.setErrorCb(function(err) {
