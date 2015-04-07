@@ -15,14 +15,14 @@ angular.module('automatch')
       link: function($scope, $element, $attrs) {
         var prev, start;
         var startTime;
-        var x = 0, y = 0, dx = 0, dy = 0, scale = 1;
+        var x = 0, y = 0, dx = 0, dy = 0;
         var disableAnimationTimeout;
 
         var rotation = parseInt(Math.random() * 5);
 
         function applyPos() {
           $element.css('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0) ' +
-                       'scale(' + scale + ') rotate(' + rotation + 'deg)');
+                       'rotate(' + rotation + 'deg)');
         }
 
         applyPos();
@@ -75,7 +75,6 @@ angular.module('automatch')
          * @param bool   top True if it should slide to the top, otherwise bottom
          */
         $scope.removeCar = function(top) {
-          scale = 1.0;
           y = top ? -$element.offset().top - $element.height() :
             $(document.body).height();
           $element.css('opacity', 0);
@@ -136,7 +135,6 @@ angular.module('automatch')
 
           x = 0;
           y = 0;
-          scale = 1;
           applyPos();
         }
 
@@ -155,7 +153,6 @@ angular.module('automatch')
 
           x = 0;
           y = 0;
-          scale = 0.4;
 
           $element.css('transform-origin', (prev.x - offset.left) + 'px ' +
                        (prev.y - offset.top) + 'px');
