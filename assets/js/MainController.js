@@ -13,14 +13,14 @@ angular.module('automatch')
 
     $scope.like = function like(car) {
       console.log('Request like', car.id);
-      io.socket.put('/car/like/' + car.id);
       $scope.cars.splice(0, 1);
+      io.socket.put('/car/like/' + car.id);
     };
 
     $scope.dislike = function dislike(car) {
       console.log('Request dislike', car.id);
-      io.socket.put('/car/dislike/' + car.id);
       $scope.cars.splice(0, 1);
+      io.socket.put('/car/dislike/' + car.id);
     };
 
     CarProvider.setErrorCb(function(err) {

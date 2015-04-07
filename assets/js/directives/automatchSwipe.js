@@ -65,6 +65,25 @@ angular.module('automatch')
           prev = pos;
         }
 
+        /**
+         * Removes a car from the list smoothly by applying a transition
+         * @param bool   top True if it should slide to the top, otherwise bottom
+         */
+        $scope.removeCar = function(top) {
+          scale = 1.0;
+          y = top ? -$element.offset().top - $element.height() :
+            $(document.body).height();
+          $element.css('opacity', 0);
+          applyPos();
+
+          $timeout(function() {
+            if (top)
+              $scope.like();
+            else
+              $scope.dislike();
+          }, 400);
+        };
+
         function touchEnd($event) {
           $event.preventDefault();
           $event.stopPropagation();
@@ -72,20 +91,24 @@ angular.module('automatch')
           var THRESHOLD = 1;
 
           var deltaTime = +new Date() - startTime;
+          toggleTransitions(true);
+          $document.unbind('touchmove mousemove', touchMove);
+          $document.unbind('touchend mouseup', touchEnd);
 
           if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy / deltaTime) > THRESHOLD) {
             console.log('SUCCESS');
-            if (dy < 0 && $scope.onlike)
-              $scope.like();
-            else if ($scope.ondislike)
-              $xcope.dislike();
+            if (dy < 0 && $scope.like)
+              $scope.removeCar(true);
+            else if ($scope.dislike)
+              $scope.removeCar(false);
+
+            return;
           }
 
-          x = 0; y = 0; scale = 1.0;
-          toggleTransitions(true);
+          x = 0;
+          y = 0;
+          scale = 1;
           applyPos();
-          $document.unbind('touchmove mousemove', touchMove);
-          $document.unbind('touchend mouseup', touchEnd);
         }
 
         var $document = $(document);
