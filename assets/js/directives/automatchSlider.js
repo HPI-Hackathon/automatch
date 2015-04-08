@@ -27,7 +27,7 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
       max: "="
     },
     template: '<div class="slider">' +
-        '<div class="handle-upper">{{ max == MAX_VALUE ? "Unbegrenzt" : max + "€" }}</div>' +
+        '<div class="handle-upper">{{ max == MAX_VALUE ? "MAX" : max + "€" }}</div>' +
         '<div class="range"></div>' +
         '<div class="handle-lower">{{ min + "€" }}</div>' +
       '</div>',

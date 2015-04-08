@@ -1,35 +1,36 @@
 
 .slider {
-	top: 36px;
-	left: 22px;
+  top: 36px;
+  left: 22px;
 }
 
 .slider, .range{
-	width: 160px;
+  width: 160px;
   height: 7px;
   display: block;
 }
+
 .handle-upper, .handle-lower {
-	background-color: #37474F;
-	position: absolute;
-	cursor: pointer;
-	width: 30px;
+  background-color: #37474F;
+  position: absolute;
+  cursor: pointer;
+  width: 30px;
   height: 30px;
   top: -12px;
   border-radius: 30px;
-	font-size: 11px;
+  font-size: 11px;
   z-index: 2;
   transform: translate3d(0,0,0);
   line-height: 90px;
 }
 
 .slider{
-	position: relative;
+  position: relative;
   background-color:#78909C;
   border-radius: 90px;
 }
 
 .range{
-	position: absolute;
-    background-color: lightblue;
+  position: absolute;
+  background-color: lightblue;
 }
