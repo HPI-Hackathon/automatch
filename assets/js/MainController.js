@@ -1,6 +1,7 @@
 
 angular.module('automatch')
   .controller('MainController', ['$scope', 'CarProvider', function($scope, CarProvider) {
+
     if (!localStorage.userId)
       localStorage.userId = generateId();
 
@@ -53,7 +54,7 @@ angular.module('automatch')
     /**
      * Plays the animation of the big button showing and hides it again
      *
-     * @param String action Either like or dislike
+     * @param String action Either like, favorite or dislike
      */
     $scope.showBigButton = function(action) {
       $scope.action = action;
@@ -84,11 +85,22 @@ angular.module('automatch')
     };
 
     /**
-     * Send either like or dislike for the specified car and remove it
+     * Send a request to favorite a car, remove it from the list
+     *
+     * @param Object car The car to favorite
+     */
+    $scope.favorite = function favorite(car) {
+      console.log('Request favorite', car.id);
+      $scope.sendAction(car, 'favorite');
+      $scope.showBigButton('favorite');
+    };
+
+    /**
+     * Send either like, favorite or dislike for the specified car and remove it
      * from the list afterwards
      *
      * @param Object car    The car for which to send the action
-     * @param String action The action to send, either like or dislike
+     * @param String action The action to send, either like, favorite or dislike
      */
     $scope.sendAction = function sendAction(car, action) {
       $scope.cars.splice(0, 1);
@@ -109,6 +121,9 @@ angular.module('automatch')
       alert('Oh No! Something went wrong! Please reload the page.');
     });
 
+    /**
+     * Queries the CarProvider for a new page and updates the model accordingly
+     */
     function loadNewPage() {
       CarProvider.fetchPage().then(function(data) {
 	$scope.cars = data.items.filter(function(car) {

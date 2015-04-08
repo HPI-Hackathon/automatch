@@ -25,6 +25,24 @@ module.exports = {
     });
   },
 
+  favorite: function(req, res) {
+    if (!req.session.user)
+      return res.serverError();
+
+    User.native(function(err, collection) {
+      collection.update({
+        identifier: req.session.user.identifier
+      }, {
+        $push: { favorites: req.body }
+      }, function(err) {
+        if (err)
+          return res.negotiate(err);
+
+        res.send();
+      });
+    });
+  },
+
   dislike: function(req, res) {
     if (!req.session.user)
       return res.serverError();
