@@ -1,5 +1,8 @@
 
 <div ng-controller="FavoritesController" class="favorites">
+  <a class="link-back" href="/">« Automatch</a>
+  <br>
+
   <div ng-click="openUrl(favorite.url)" class="favorite" ng-repeat="favorite in favorites">
     <div class="image" ng-style="{ 'background-image': 'url(' + getImage(favorite) +')' }"></div>
     <h5>{{ favorite.title }}</h5>

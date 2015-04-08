@@ -15,7 +15,11 @@
     <!--STYLES END-->
   </head>
 
-  <body>
+  <body
+    <% if (typeof noOverflow !== 'undefined') { %>
+        class="no-overflow"
+    <% } %>
+    >
     <%- body %>
 
     <!--TEMPLATES-->

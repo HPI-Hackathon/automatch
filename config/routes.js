@@ -33,6 +33,9 @@ module.exports.routes = {
   },
 
   '/view/favorites': {
-    view: 'favorites'
+    view: 'favorites',
+    locals: {
+      'noOverflow': true
+    }
   }
 };

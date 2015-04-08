@@ -7,10 +7,12 @@ html {
 
 body {
   background-color: #333;
-  overflow: hidden;
   height: 100%;
   width: 100%;
   font-family: 'Roboto-Condensed', sans-serif;
+}
+body:not(.no-overflow) {
+  overflow: hidden;
 }
 
 * {
@@ -119,6 +121,11 @@ body {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   text-decoration: none;
   color: white;
+}
+
+.link-back {
+  color: white;
+  font-weight: bold;
 }
 
 @import 'card.less';
