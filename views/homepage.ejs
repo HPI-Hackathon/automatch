@@ -33,9 +33,11 @@
 
   <div class="automatchSidebar">
     <automatch-slider onupdate="updatePriceBoundaries(min, max)" max="upperPrice" min="lowerPrice"></automatch-slider>
-    <label class="suggestions"><input ng-change="toggleShowSuggestions(suggestionsOnly)" ng-model="suggestionsOnly" type="checkbox"> Vorschläge</label>
+    <label class="suggestions"><input automatch-touch-click-fix ng-change="toggleShowSuggestions(suggestionsOnly)" ng-model="suggestionsOnly" type="checkbox"> Vorschläge</label>
 
-    <a href="/view/favorites" class="favorites-button icon-heart"> FAVORITEN</a>
+    <a href="/view/favorites"
+       automatch-click="openUrlDirect('/view/favorites')"
+       class="favorites-button icon-heart"> FAVORITEN</a>
   </div>
 
   <div class="buttons-container">

@@ -9,6 +9,7 @@ angular.module('automatch')
     // export for usage in views
     $scope.getImage = getImage;
     $scope.openUrl = openUrl;
+    $scope.openUrlDirect = function(url) { location.href = url; };
 
     UserService.init();
 
