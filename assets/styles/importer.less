@@ -42,12 +42,27 @@ body {
     line-height: 220px;
   }
 
-  -webkit-animation: show-big-button 800ms;
-  -webkit-animation-fill-mode: both;
-  animation: show-big-button 800ms;
-  animation-fill-mode: both;
+  &.animate {
+    -webkit-animation: show-big-button 800ms;
+    -webkit-animation-fill-mode: both;
+    -moz-animation: show-big-button 800ms;
+    -moz-animation-fill-mode: both;
+    animation: show-big-button 800ms;
+    animation-fill-mode: both;
+  }
 }
 
+@-moz-keyframes show-big-button {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 @keyframes show-big-button {
   0% {
     opacity: 0;

@@ -60,9 +60,9 @@ angular.module('automatch')
      */
     $scope.showBigButton = function(action) {
       $scope.action = action;
-      var $button = $('.big-button').show();
+      var $button = $('.big-button').addClass('animate').show();
       setTimeout(function() {
-        $button.hide();
+        $button.removeClass('animate').hide();
       }, 800);
     };
 
