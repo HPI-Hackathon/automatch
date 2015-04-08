@@ -1,29 +1,35 @@
 
 angular.module('automatch')
-  .controller('MainController', ['$scope', 'CarProvider',
-              function($scope, CarProvider) {
+  .controller('MainController', ['$scope', 'CarProvider', function($scope, CarProvider) {
 
-	if (! localStorage.userId)
-		localStorage.userId = generateId();
-		
-	/**
-	 * generates random string of characters
-	 */
-	function generateId () {
-		var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-		var str = '';
-		for (var i = 0; i < 32; i++){
-			str += chars[parseInt(Math.random() * chars.length)];
-		}
+    if (!localStorage.userId)
+      localStorage.userId = generateId();
 
-		return str;
-	}
+    io.socket.post('/user/login/' + localStorage.userId, function(data, jwres) {
+      if (jwres.statusCode !== 200)
+	return alert('Eine Verbindung zum Server konnte nicht hergestellt werden. Bitte die Seite neu laden.');
+    });
+
+    /**
+     * generates random string of characters
+     */
+    function generateId () {
+      var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+      var str = '';
+      for (var i = 0; i < 32; i++){
+	str += chars[parseInt(Math.random() * chars.length)];
+      }
+
+      return str;
+    }
+
     /**
      * positions the cards in the center of the screen in
      * a way that they fit the best possible
      */
     function reposition() {
       var fullWidth = $(document.body).width();
+      var fullHeight = $(document.body).height();
       $scope.cardWidth = Math.min(fullWidth * 0.9, 600);
 
       $scope.cardX = fullWidth / 2 - $scope.cardWidth / 2;
@@ -41,15 +47,14 @@ angular.module('automatch')
      * @return string The url to the image
      */
     $scope.getImage = function getImage(car) {
-      return 'http://' + car.images[0] + '/_27.jpg';
+      // use _27 for larger but significantly slower images
+      return 'http://' + car.images[0] + '/_8.jpg';
     };
-
-    $scope.action = 'dislike';
 
     /**
      * Plays the animation of the big button showing and hides it again
      *
-     * @param String action Either like or dislike
+     * @param String action Either like, favorite or dislike
      */
     $scope.showBigButton = function(action) {
       $scope.action = action;
@@ -66,9 +71,7 @@ angular.module('automatch')
      */
     $scope.like = function like(car) {
       console.log('Request like', car.id);
-      $scope.action = 'like';
-      $scope.cars.splice(0, 1);
-      io.socket.put('/car/like/' + car.id);
+      $scope.sendAction(car, 'like');
     };
 
     /**
@@ -78,8 +81,39 @@ angular.module('automatch')
      */
     $scope.dislike = function dislike(car) {
       console.log('Request dislike', car.id);
+      $scope.sendAction(car, 'dislike');
+    };
+
+    /**
+     * Send a request to favorite a car, remove it from the list
+     *
+     * @param Object car The car to favorite
+     */
+    $scope.favorite = function favorite(car) {
+      console.log('Request favorite', car.id);
+      $scope.sendAction(car, 'favorite');
+      $scope.showBigButton('favorite');
+    };
+
+    /**
+     * Send either like, favorite or dislike for the specified car and remove it
+     * from the list afterwards
+     *
+     * @param Object car    The car for which to send the action
+     * @param String action The action to send, either like, favorite or dislike
+     */
+    $scope.sendAction = function sendAction(car, action) {
       $scope.cars.splice(0, 1);
-      io.socket.put('/car/dislike/' + car.id);
+      io.socket.put('/car/' + action, car, function(data, jwres) {
+	if (jwres.statusCode === 200)
+	  return;
+
+	console.log('Failed to send action:', jwres);
+	return alert('Bewertung konnte nicht abgesendet werden. Bitte die Seite neuladen.');
+      });
+
+      if ($scope.cars.length < 1)
+	loadNewPage();
     };
 
     CarProvider.setErrorCb(function(err) {
@@ -87,21 +121,31 @@ angular.module('automatch')
       alert('Oh No! Something went wrong! Please reload the page.');
     });
 
-    CarProvider.fetchPage().then(function(data) {
-      $scope.cars = data.items.filter(function(car) {
-        return car.numImages > 0;
-      }).map(function(car) {
-        return {
-          title: car.title,
-          category: car.category,
-          url: car.url,
-          id: car.id,
-          price: car.p,
-          images: car.images.map(function(image) {
-            return image.uri;
-          })
-        };
+    /**
+     * Queries the CarProvider for a new page and updates the model accordingly
+     */
+    function loadNewPage() {
+      CarProvider.fetchPage().then(function(data) {
+	$scope.cars = data.items.filter(function(car) {
+	  return car.numImages > 0;
+	}).map(function(car) {
+	  console.log(car);
+	  return {
+	    color: car.attr.ecol,
+	    brand: car.title.split(' ')[0],
+	    title: car.title,
+	    category: car.category,
+	    url: car.url,
+	    id: car.id,
+	    price: car.p,
+	    images: car.images.map(function(image) {
+	      return image.uri;
+	    })
+	  };
+	});
       });
-    });
+    }
+
+    loadNewPage();
   }]);
 
