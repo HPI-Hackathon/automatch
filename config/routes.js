@@ -25,6 +25,7 @@ module.exports.routes = {
   'PUT /car/dislike': 'UserController.dislike',
   'PUT /car/favorite': 'UserController.favorite',
   'POST /user/login/:id': 'UserController.login',
+  'GET /suggestions': 'UserController.getSuggestions',
 
   '/': {
     view: 'homepage'
