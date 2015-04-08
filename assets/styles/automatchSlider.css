@@ -1,5 +1,11 @@
+
+.slider {
+	top: 12px;
+	left: 12px;
+}
+
 .slider, .range{
-	width: 371px;
+	width: 180px;
     height: 7px;
     display: block;
 }
@@ -11,6 +17,7 @@
     height: 15px;
     top: -4px;
     border-radius: 15px;
+	font-size: 10px;
     z-index: 2;
     transform: translate3d(0,0,0);
     line-height: 50px;
@@ -26,9 +33,3 @@
     background-color: lightblue;
 }
 
-.handle-upper{
-	left: 370px;
-}
-.handle-lower{
-	left: -2.5px;
-}

@@ -2,7 +2,8 @@ angular.module('automatch')
 .directive('automatchSidebar', ['$timeout', function($timeout) {
   return {
     restrict: 'C',
-    template: '<div class="burger icon-cog-1"></div><div class="content"></div>',
+    template: '<div class="burger icon-cog-1"></div><div class="content"><ng-transclude></ng-transclude></div>',
+    transclude: true,
     link: function(scope, element, attr) {
 
       var $document = $(document);

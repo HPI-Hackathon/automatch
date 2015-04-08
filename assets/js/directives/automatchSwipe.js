@@ -20,6 +20,7 @@ angular.module('automatch')
         var rotation = parseInt(Math.random() * 5);
 
         function applyPos() {
+          var rot = $element.index() === 1 ? '0' : rotation;
           $element.css('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0) ' +
                        'scale(' + scale + ') rotate(' + rotation + 'deg)');
         }
