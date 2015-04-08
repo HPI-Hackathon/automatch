@@ -1,35 +1,34 @@
 
 .slider {
-	top: 12px;
-	left: 12px;
+	top: 36px;
+	left: 22px;
 }
 
 .slider, .range{
-	width: 180px;
-    height: 7px;
-    display: block;
+	width: 160px;
+  height: 7px;
+  display: block;
 }
 .handle-upper, .handle-lower {
 	background-color: green;
 	position: absolute;
 	cursor: pointer;
-	width: 15px;
-    height: 15px;
-    top: -4px;
-    border-radius: 15px;
-	font-size: 10px;
-    z-index: 2;
-    transform: translate3d(0,0,0);
-    line-height: 50px;
+	width: 30px;
+  height: 30px;
+  top: -12px;
+  border-radius: 30px;
+	font-size: 20px;
+  z-index: 2;
+  transform: translate3d(0,0,0);
+  line-height: 90px;
 }
 
 .slider{
 	position: relative;
-    background-color: lightgrey;
+  background-color: lightgrey;
 }
 
 .range{
 	position: absolute;
     background-color: lightblue;
 }
-
