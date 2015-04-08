@@ -32,7 +32,8 @@
   </div>
 
   <div class="automatchSidebar">
-    <slider max="a" min="a"></slider>
+    <automatch-slider onupdate="updatePriceBoundaries(min, max)" max="upperPrice" min="lowerPrice"></automatch-slider>
+    <label class="suggestions"><input ng-change="toggleShowSuggestions(suggestionsOnly)" ng-model="suggestionsOnly" type="checkbox"> Vorschläge</label>
   </div>
 
   <div class="buttons-container">

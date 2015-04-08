@@ -30,5 +30,9 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
+  },
+
+  '/view/favorites': {
+    view: 'favorites'
   }
 };

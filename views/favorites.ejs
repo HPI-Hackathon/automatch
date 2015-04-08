@@ -1,0 +1,9 @@
+
+<div ng-controller="FavoritesController" class="favorites">
+  <div ng-click="openUrl(favorite.url)" class="favorite" ng-repeat="favorite in favorites">
+    <div class="image" ng-style="{ 'background-image': 'url(' + getImage(favorite) +')' }"></div>
+    <h5>{{ favorite.title }}</h5>
+    <div class="price">{{ favorite.price }}</div>
+  </div>
+</div>
+
