@@ -60,56 +60,63 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
           $document.bind('mouseup touchend touchcancel', end);
         });
 
-        function move($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
+      /**
+       * Process touch or mouse move events and call @see updatePositions
+       */
+      function move($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
 
-          var pos = getPos($event);
-          var offset = $element.offset();
+        var pos = getPos($event);
+        var offset = $element.offset();
 
-          var x;
-          var dx = pos.x - offset.left;
-          if (lowerValMoving)
-            x = clamp(0, $scope.upperCost, dx);
-          else
-            x = clamp($scope.lowerCost, $slider.width(), dx);
+        var x;
+        var dx = pos.x - offset.left;
+        if (lowerValMoving)
+          x = clamp(0, $scope.upperCost, dx);
+        else
+          x = clamp($scope.lowerCost, $slider.width(), dx);
 
-          if (lowerValMoving)
-            $scope.lowerCost = x;
-          else
-            $scope.upperCost = x;
+        if (lowerValMoving)
+          $scope.lowerCost = x;
+        else
+          $scope.upperCost = x;
 
-          updatePositions();
-        }
-
-        function updatePositions() {
-          var lx = $scope.lowerCost - $lower.width() / 2;
-          var ux = $scope.upperCost - $upper.width() / 2;
-          $lower.css('left', lx + 'px');
-          $upper.css('left', ux + 'px');
-
-          $range.css('left', lx + 'px').width(ux - lx);
-
-          var maxWidth = $slider.width();
-
-          $scope.min = scale[parseInt($scope.lowerCost / maxWidth * scale.length)];
-          $scope.max = scale[parseInt($scope.upperCost / maxWidth * scale.length)];
-          if (!$scope.max)
-            $scope.max = $scope.MAX_VALUE;
-
-          if (!$scope.$$phase)
-            $scope.$apply();
-        }
-
-        function end($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
-
-          $scope.min = parseInt($scope.lowerCost);
-
-          $document.unbind('mousemove touchmove', move);
-          $document.unbind('mouseup touchend touchcancel', end);
-        }
+        updatePositions();
       }
-    };
-  }]);
+
+      /**
+       * Update positions of the handle elements and the range element and the labels
+       */
+      function updatePositions() {
+        var lx = $scope.lowerCost - $lower.width() / 2;
+        var ux = $scope.upperCost - $upper.width() / 2;
+        $lower.css('left', lx + 'px');
+        $upper.css('left', ux + 'px');
+
+        $range.css('left', lx + 'px').width(ux - lx);
+
+        var maxWidth = $slider.width();
+
+        $scope.min = scale[parseInt($scope.lowerCost / maxWidth * scale.length)];
+        $scope.max = scale[parseInt($scope.upperCost / maxWidth * scale.length)];
+        if (!$scope.max)
+          $scope.max = $scope.MAX_VALUE;
+
+        if (!$scope.$$phase)
+          $scope.$apply();
+      }
+
+      /**
+       * End of drag operation. Disconnect listeners
+       */
+      function end($event) {
+        $event.stopPropagation();
+        $event.preventDefault();
+
+        $document.unbind('mousemove touchmove', move);
+        $document.unbind('mouseup touchend touchcancel', end);
+      }
+    }
+  };
+}]);
