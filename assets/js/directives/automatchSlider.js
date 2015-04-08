@@ -1,7 +1,11 @@
-angular.module('automatch').directive('automatchSlider', ['$document', function($document) {
+angular.module('automatch').directive('slider', ['$document', function($document) {
   return {
   	restrict: 'E',
-    template: '<div class="slider"><div class="handle-upper"></div><div class="range"></div><div class="handle-lower"></div></div>',
+    scope: {
+      min: "=",
+      max: "="
+    },
+    template: '<div class="slider"><div class="handle-upper">{{upperCost}}</div><div class="range"></div><div class="handle-lower">{{lowerCost}}</div></div>',
     link: function(scope, element, attr) {
 
       window.a = element;
@@ -10,8 +14,26 @@ angular.module('automatch').directive('automatchSlider', ['$document', function(
       var range = $(".range", element);
       var slider = $(".slider", element);
 
-      var startX = 0, startY, y = 500,  x = 0;
+      var startX = 0, startY, y = 371,  x = 0, max = 500;
+      scope.upperCost = 'unbegrenzt';
+      scope.lowerCost = x + '€';
+      scope.min = parseInt(scope.lowerCost);
+      scope.max = 9000000;
 
+      function calculate(n){
+        if ((n/max)*5*1000 <= 1000){
+          return parseInt((n/max)*5*1000);
+        }
+        else if ((n/max)*10*5*1000-9000 <= 10000){
+          return parseInt((n/max)*5*10000-9000);
+        }
+        else if ((n/max)*25*10000-85500 <= 100000){
+          return parseInt((n/max)*25*10000-85500);
+        }
+        else {
+          return "0";
+        }
+      }
 
       lower.on('mousedown', function(event) {
         // Prevent default dragging of selected content
@@ -23,13 +45,16 @@ angular.module('automatch').directive('automatchSlider', ['$document', function(
 
       function lowerMousemove(event) {
         x = event.pageX - startX;
-        if (x <= 500 && x >= -2.5 && (x+10) <= y){
+        if (x <= 373 && x >= -2.5 && (x+10) <= y){
           lower.css({
               left:  x + 'px'
           });
+          scope.$apply(function(){
+          scope.lowerCost = calculate(x) + '€';
+          });
           range.css({
             left: x + 'px',
-            width: (500-x-(500-y)) + 'px'
+            width: (y-x) + 'px'
           });
         }
       }
@@ -37,6 +62,7 @@ angular.module('automatch').directive('automatchSlider', ['$document', function(
       function lowerMouseup() {
         $document.off('mousemove', lowerMousemove);
         $document.off('mouseup', lowerMouseup);
+        scope.min = parseInt(scope.lowerCost);
       }
       upper.on('mousedown', function(event) {
         // Prevent default dragging of selected content
@@ -48,12 +74,21 @@ angular.module('automatch').directive('automatchSlider', ['$document', function(
 
       function upperMousemove(event) {
         y = event.pageX - startY;
-        if (y <= 500 && y >= -2.5 && x <= (y-10)){
+        if (y <= 373 && y >= -2.5 && x <= (y-10)){
           upper.css({
             left:  y + 'px'
           });
+          scope.$apply(function(){
+            if (y > 370)
+            {
+              scope.upperCost = 'unbegrenzt';
+            }
+            else{
+              scope.upperCost = calculate(y) + '€';
+            }
+          });
           range.css({
-            width: (500-(500-y)-x) + 'px'
+            width: (y-x) + 'px'
           });
         }
       }
@@ -61,6 +96,13 @@ angular.module('automatch').directive('automatchSlider', ['$document', function(
       function upperMouseup() {
         $document.off('mousemove', upperMousemove);
         $document.off('mouseup', upperMouseup);
+            if (y > 370)
+            {
+              scope.max = 9000000;
+            }
+            else{
+              scope.max = parseInt(scope.upperCost);
+            }
       }
     }
   };
