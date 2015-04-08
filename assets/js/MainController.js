@@ -2,6 +2,8 @@
 angular.module('automatch')
   .controller('MainController', ['$scope', 'CarProvider', function($scope, CarProvider) {
 
+    document.body.scrollTop = 0;
+
     if (!localStorage.userId)
       localStorage.userId = generateId();
 
