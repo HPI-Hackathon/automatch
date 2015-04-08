@@ -67,32 +67,39 @@ angular.module('automatch')
     /**
      * Send a request to like a car, remove it from the list
      *
-     * @param Object car The car to like
+     * @param Object car The car to like or null to pick the current
      */
     $scope.like = function like(car) {
-      console.log('Request like', car.id);
       $scope.sendAction(car, 'like');
     };
 
     /**
      * Send a request to dislike a car, remove it from the list
      *
-     * @param Object car The car to dislike
+     * @param Object car The car to dislike or null to pick the current
      */
     $scope.dislike = function dislike(car) {
-      console.log('Request dislike', car.id);
       $scope.sendAction(car, 'dislike');
     };
 
     /**
      * Send a request to favorite a car, remove it from the list
      *
-     * @param Object car The car to favorite
+     * @param Object car The car to favorite or null to pick the current
      */
     $scope.favorite = function favorite(car) {
-      console.log('Request favorite', car.id);
+      car = car || $scope.cars[0];
       $scope.sendAction(car, 'favorite');
       $scope.showBigButton('favorite');
+    };
+
+    /**
+     * Open the given url in a new tab.
+     *
+     * @param String url The url to open
+     */
+    $scope.openUrl = function openUrl(url) {
+      window.open(url, '_blank');
     };
 
     /**
@@ -103,6 +110,16 @@ angular.module('automatch')
      * @param String action The action to send, either like, favorite or dislike
      */
     $scope.sendAction = function sendAction(car, action) {
+      // we were called from a button without direct context.
+      // Show the indicator.
+      console.log(action);
+      if (!car)
+	$scope.showBigButton(action);
+
+      car = car || $scope.cars[0];
+
+      console.log('Request', action, car.id);
+
       $scope.cars.splice(0, 1);
       io.socket.put('/car/' + action, car, function(data, jwres) {
 	if (jwres.statusCode === 200)
@@ -129,7 +146,6 @@ angular.module('automatch')
 	$scope.cars = data.items.filter(function(car) {
 	  return car.numImages > 0;
 	}).map(function(car) {
-	  console.log(car);
 	  return {
 	    color: car.attr.ecol,
 	    brand: car.title.split(' ')[0],

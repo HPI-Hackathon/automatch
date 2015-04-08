@@ -19,19 +19,20 @@
       </div>
     </div>
     <a ng-show="$index == 0"
-       ng-attr-href="{{ car.url }}"
+       automatch-click="openUrl(car.url)"
        class="icon-money-1 buy-button"> BUY!</a>
 
     <a ng-show="$index == 0"
-       ng-click="favorite(car)"
+       automatch-click="favorite(car)"
        class="fav-button icon-heart"></a>
 
   </div>
   <div class="automatchSidebar">
 
   </div>
-	<div class="buttons-container">
-    <div class="thumbsup-button icon-thumbs-up"></div>
-    <div class="thumbsdown-button icon-thumbs-down"></div>
+
+  <div class="buttons-container">
+    <div automatch-click="like()" class="thumbsup-button icon-thumbs-up"></div>
+    <div automatch-click="dislike()" class="thumbsdown-button icon-thumbs-down"></div>
   </div>
 </div>
