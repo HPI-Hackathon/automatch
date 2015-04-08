@@ -107,7 +107,6 @@ angular.module('automatch')
 	  data.lowerPrice = $scope.suggestionCriteria.lowerPrice;
 	  data.upperPrice = $scope.suggestionCriteria.upperPrice;
 	  $scope.suggestionCriteria = data;
-	  loadNewPage();
 	});
       });
     };
