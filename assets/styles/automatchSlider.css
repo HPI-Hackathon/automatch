@@ -1,5 +1,5 @@
 .slider, .range{
-	width: 500px;
+	width: 371px;
     height: 7px;
     display: block;
 }
@@ -11,7 +11,9 @@
     height: 15px;
     top: -4px;
     border-radius: 15px;
-    z-index: 1;
+    z-index: 2;
+    transform: translate3d(0,0,0);
+    line-height: 50px;
 }
 
 .slider{
@@ -25,7 +27,7 @@
 }
 
 .handle-upper{
-	left: 497.5px;
+	left: 370px;
 }
 .handle-lower{
 	left: -2.5px;
