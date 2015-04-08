@@ -7,6 +7,8 @@
        ng-class="{ 'icon-thumbs-up': action == 'like', 'icon-thumbs-down': action == 'dislike', 'icon-heart': action == 'favorite' }">
   </div>
 
+  <div class="loading-indicator icon-truck" ng-show="!cars || cars.length < 1"></div>
+
   <div automatch-swipe
      like="like(car)"
      dislike="dislike(car)"

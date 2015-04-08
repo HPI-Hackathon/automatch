@@ -128,6 +128,23 @@ body:not(.no-overflow) {
   font-weight: bold;
 }
 
+.loading-indicator {
+  color: #eee;
+  font-size: 64px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -70px;
+  margin-top: -70px;
+  text-align: center;
+
+  &:after {
+    content: 'Wird geladen ...';
+    display: block;
+    font-size: 22px;
+  }
+}
+
 @import 'card.less';
 @import 'buttons.less';
 @import 'favorites.less';

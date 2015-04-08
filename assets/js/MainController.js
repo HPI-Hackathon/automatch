@@ -154,6 +154,8 @@ angular.module('automatch')
      * Queries the CarProvider for a new page and updates the model accordingly
      */
     function loadNewPage() {
+      $scope.cars = [];
+
       CarProvider.fetchPage($scope.suggestionCriteria).then(function(data) {
 	$scope.cars = data.items.filter(function(car) {
 	  return car.numImages > 0;
