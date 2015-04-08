@@ -1,8 +1,8 @@
 
 <div ng-controller="MainController">
-  <div ng-style="{ 'background-color': action == 'like' ? 'green' : 'red' }"
+  <div ng-style="{ 'background-color': action == 'like' ? 'green' : action == 'favorite' ? 'white' : 'red' }"
        class="big-button"
-       ng-class="{ 'icon-thumbs-up': action == 'like', 'icon-thumbs-down': action == 'dislike' }">
+       ng-class="{ 'icon-thumbs-up': action == 'like', 'icon-thumbs-down': action == 'dislike', 'icon-heart': action == 'favorite' }">
   </div>
 
   <div automatch-swipe
@@ -19,15 +19,20 @@
       </div>
     </div>
     <a ng-show="$index == 0"
-       ng-attr-href="{{ car.url }}"
+       automatch-click="openUrl(car.url)"
        class="icon-money-1 buy-button"> BUY!</a>
 
-    <div ng-show="$index == 0"
-       class="fav-button icon-heart"></div>
+    <a ng-show="$index == 0"
+       automatch-click="favorite(car)"
+       class="fav-button icon-heart"></a>
 
   </div>
   <div class="automatchSidebar">
 
   </div>
 
+  <div class="buttons-container">
+    <div automatch-click="like()" class="thumbsup-button icon-thumbs-up"></div>
+    <div automatch-click="dislike()" class="thumbsdown-button icon-thumbs-down"></div>
+  </div>
 </div>

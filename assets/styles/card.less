@@ -11,6 +11,7 @@
   border-radius: 2px;
 
   .car-title {
+	overflow: hidden;
     font-weight: bold;
     color: white;
     position: absolute;
@@ -25,7 +26,7 @@
   .car-image {
     height: 300px;
     position: relative;
-    background-color: #333;
+    background-color: #000;
     background-image: url(http://i.ebayimg.com/00/s/NTc2WDEwMjQ=/z/vAQAAOSw7aBVFVaG/$_27.jpg);
     background-position: center;
     background-size: cover;
@@ -46,7 +47,7 @@
     color: white;
     border-radius: 4px;
   }
-  
+
   .buy-button{
 	padding: 10px;
 	font-family: 'Roboto-Consensed', sans-serif;
@@ -61,24 +62,26 @@
 	font-weight:bold;
 	text-decoration:none;
 	font-size:20;
+	cursor: pointer;
+  }
+
+  .fav-button{
+	cursor: pointer;
+	padding: 3px;
+	position: absolute;
+	border-radius: 4px;
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+	background-color: white;
+	right: 120px;
+	bottom: -32px;
+	box-shadow: 0 3px 8px black;
+	color: #E6151C;
+	font-size: 25;
+
+	&:before {
+	  font-size: 32px;
 	}
-	
-	.fav-button{
-		padding: 3px;
-		position: absolute;
-		border-radius: 4px;
-		text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-		background-color: white;
-		right: 120px;
-		bottom: -32px;
-		box-shadow: 0 3px 8px black;
-		color: #E6151C;
-		font-size: 25;
-		
-		&:before {
-			font-size: 32px;
-		}
-	}
+  }
 
 }
 

@@ -17,6 +17,7 @@ module.exports = {
       unique: true
     },
     password: 'STRING',
+    identifier: 'STRING',
     liked: 'ARRAY',
     hated: 'ARRAY',
     favorites: 'ARRAY',
@@ -71,6 +72,9 @@ module.exports = {
   },
 
   beforeCreate: function beforeCreate(attrs, next) {
+    if (!attrs.password)
+      return next();
+
     this.genPassword(attrs.password, function(err, hash) {
       if (err)
         return next(err);

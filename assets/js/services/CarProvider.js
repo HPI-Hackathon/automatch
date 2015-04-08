@@ -1,9 +1,9 @@
 
 angular.module('automatch')
   .factory('CarProvider', ['$q', '$http', function($q, $http) {
-    var PAGE_SIZE = 30;
-    var offset = 0;
+    var PAGE_SIZE = 10;
     var errorCb = null;
+    var maxResults = -1;
 
     /**
      * Main function that fetches a page of car objects as returned from mobile
@@ -13,12 +13,26 @@ angular.module('automatch')
      */
     function fetchPage() {
       return $q(function(resolve, reject) {
-        $http.get('http://m.mobile.de/svc/s/?vc=Car&psz=' + PAGE_SIZE + '&ps' + offset)
-          .success(function(data) {
-            offset += PAGE_SIZE;
-            resolve(data);
-          })
-          .error(errorCb);
+        var baseUrl = 'http://m.mobile.de/svc/s/?vc=Car';
+
+        if (maxResults < 0) {
+          $http.get(baseUrl + '&psz=1')
+            .success(function(data) {
+              maxResults = data.numResultsTotal;
+              fetch();
+            });
+        } else
+          fetch();
+
+        function fetch() {
+          var page = parseInt(Math.random() * maxResults) - PAGE_SIZE;
+
+          $http.get(baseUrl + '&psz=' + PAGE_SIZE + '&ps=' + page)
+            .success(function(data) {
+              resolve(data);
+            })
+            .error(errorCb);
+        }
       });
     }
 

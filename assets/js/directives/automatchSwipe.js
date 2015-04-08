@@ -1,6 +1,10 @@
 
 angular.module('automatch')
   .directive('automatchSwipe', ['$timeout', function($timeout) {
+    $(document.body).bind('touchstart touchend touchmove', function($event) {
+      $event.preventDefault();
+    });
+
     return {
       restrict: 'A',
       scope: {
@@ -12,7 +16,6 @@ angular.module('automatch')
         var prev, start;
         var startTime;
         var x = 0, y = 0, dx = 0, dy = 0, scale = 1;
-        var disableAnimationTimeout;
 
         var rotation = parseInt(Math.random() * 5);
 
@@ -24,7 +27,7 @@ angular.module('automatch')
         applyPos();
 
         function toggleTransitions(enable) {
-          var duration = enable ? '150ms' : '0ms';
+          var duration = enable ? '300ms' : '0ms';
           $element.css({
             'transition-duration': duration,
             '-ms-transition-duration': duration,
@@ -68,12 +71,14 @@ angular.module('automatch')
 
         /**
          * Removes a car from the list smoothly by applying a transition
-         * @param bool   top True if it should slide to the top, otherwise bottom
+         * @param bool top True if it should slide to the top, otherwise bottom
          */
         $scope.removeCar = function(top) {
-          scale = 1.0;
-          y = top ? -$element.offset().top - $element.height() :
-            $(document.body).height();
+          toggleTransitions(true);
+          scale = 0.4;
+          var OFFSET_TOP = 50;
+          y = top ? -OFFSET_TOP - $element.height() :
+            $(document.body).height() - OFFSET_TOP;
           $element.css('opacity', 0);
           applyPos();
 
@@ -90,20 +95,40 @@ angular.module('automatch')
           $event.stopPropagation();
 
           var THRESHOLD = 1;
+          var BORDER = 100;
 
           var deltaTime = +new Date() - startTime;
-          toggleTransitions(true);
           $document.unbind('touchmove mousemove', touchMove);
           $document.unbind('touchend mouseup', touchEnd);
 
+          var found = false;
+          var up = false;
+
+          var pos;
+          if ($event.originalEvent.touches)
+            pos = prev;
+          else
+            pos = getPos($event);
+
           if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy / deltaTime) > THRESHOLD) {
+            found = true;
+
+            up = dy < 0;
+          } else {
+            up = pos.y < BORDER;
+            found = up || pos.y > $(document.body).height() - BORDER;
+          }
+
+          toggleTransitions(true);
+
+          if (found) {
             $scope.$apply(function() {
               $scope.notify({
                 action: dy < 0 ? 'like' : 'dislike'
               });
             });
 
-            if (dy < 0 && $scope.like)
+            if (up && $scope.like)
               $scope.removeCar(true);
             else if ($scope.dislike)
               $scope.removeCar(false);
@@ -123,6 +148,8 @@ angular.module('automatch')
           if ($event.target.tagName.toLowerCase() === 'a')
             return;
 
+          toggleTransitions(false);
+
           $event.preventDefault();
           $event.stopPropagation();
 
@@ -132,18 +159,11 @@ angular.module('automatch')
 
           x = 0;
           y = 0;
-          scale = 0.4;
 
           $element.css('transform-origin', (prev.x - offset.left) + 'px ' +
                        (prev.y - offset.top) + 'px');
 
-          toggleTransitions(true);
           applyPos();
-
-          clearTimeout(disableAnimationTimeout);
-          disableAnimationTimeout = setTimeout(function() {
-            toggleTransitions(false);
-          }, 150);
 
           $document.bind('touchmove mousemove', touchMove);
           $document.bind('touchend touchcancel mouseup', touchEnd);

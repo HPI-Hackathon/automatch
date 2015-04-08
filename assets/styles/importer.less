@@ -36,15 +36,34 @@ body {
     color: white;
   }
 
+  &.icon-heart:before {
+    color: red;
+    font-size: 128px;
+    line-height: 220px;
+  }
+
   -webkit-animation: show-big-button 800ms;
   -webkit-animation-fill-mode: both;
+  animation: show-big-button 800ms;
+  animation-fill-mode: both;
 }
 
+@keyframes show-big-button {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 @-webkit-keyframes show-big-button {
   0% {
     opacity: 0;
   }
-  20% {
+  10% {
     opacity: 0.8;
   }
   100% {
@@ -53,3 +72,4 @@ body {
 }
 
 @import 'card.less';
+@import 'buttons.less';
