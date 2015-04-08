@@ -71,7 +71,11 @@ module.exports = {
         return res.negotiate(err);
 
       if (user) {
-        req.session.user = user.toJSON();
+        // in case we need more info about user, add it here
+        // we don't want to include all the data arrays.
+        req.session.user = {
+          identifier: user.identifier
+        };
         return res.send();
       }
 
@@ -87,6 +91,57 @@ module.exports = {
         req.session.user = user.toJSON();
         return res.send();
       });
+    });
+  },
+
+  getSuggestions: function(req, res) {
+    if (!req.session.user)
+      return res.badRequest();
+
+    var upperPrice = req.param('upper') || Infinity;
+    var lowerPrice = req.param('lower') || 0;
+
+    User.findOneByIdentifier(req.session.user.identifier).exec(function(err, user) {
+      var attrs = ['color', 'brand', 'category'];
+      var counts = {};
+      var bestFit = {};
+
+      attrs.forEach(function(attr) {
+        counts[attr] = {};
+      });
+
+      user.liked.forEach(function(car) {
+        attrs.forEach(function(attr) {
+          if (!counts[attr][car[attr]])
+            counts[attr][car[attr]] = 1;
+          else
+            counts[attr][car[attr]]++;
+        });
+      });
+
+      user.favorites.forEach(function(car) {
+        attrs.forEach(function(attr) {
+          if (!counts[attr][car[attr]])
+            counts[attr][car[attr]] = 5;
+          else
+            counts[attr][car[attr]] += 5;
+        });
+      });
+
+      attrs.forEach(function(attr) {
+        var max = -1;
+        var maxKey;
+        Object.keys(counts[attr]).forEach(function(key) {
+          if (counts[attr][key] > max) {
+            maxKey = key;
+            max = counts[attr][key];
+          }
+        });
+
+        bestFit[attr] = maxKey;
+      });
+
+      res.send(bestFit);
     });
   }
 
