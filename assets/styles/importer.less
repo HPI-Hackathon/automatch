@@ -7,10 +7,12 @@ html {
 
 body {
   background-color: #333;
-  overflow: hidden;
   height: 100%;
   width: 100%;
   font-family: 'Roboto-Condensed', sans-serif;
+}
+body:not(.no-overflow) {
+  overflow: hidden;
 }
 
 * {
@@ -20,6 +22,7 @@ body {
 .logo {
   width: 100px;
   height: 40px;
+  display: block;
   background-size: contain;
   background-image: url(/images/logo.png);
   position: absolute;
@@ -98,5 +101,51 @@ body {
   }
 }
 
+.suggestions {
+  position: absolute;
+  display: block;
+  top: 92px;
+  font-size: 14px;
+  left: 32px;
+}
+
+.favorites-button {
+  top: 136px;
+  left: 32px;
+  position: absolute;
+
+  font-weight: bold;
+  background-color: #F0C400;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  color: white;
+}
+
+.link-back {
+  color: white;
+  font-weight: bold;
+}
+
+.loading-indicator {
+  color: #eee;
+  font-size: 64px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -70px;
+  margin-top: -70px;
+  text-align: center;
+
+  &:after {
+    content: 'Wird geladen ...';
+    display: block;
+    font-size: 22px;
+  }
+}
+
 @import 'card.less';
 @import 'buttons.less';
+@import 'favorites.less';

@@ -1,29 +1,17 @@
 
 angular.module('automatch')
-  .controller('MainController', ['$scope', 'CarProvider', function($scope, CarProvider) {
+  .controller('MainController', ['$scope', 'CarProvider', 'UserService', 'getImage', 'openUrl', function($scope, CarProvider, UserService, getImage, openUrl) {
 
     document.body.scrollTop = 0;
+    $scope.suggestionCriteria = {};
+    $scope.suggestionsOnly = false;
 
-    if (!localStorage.userId)
-      localStorage.userId = generateId();
+    // export for usage in views
+    $scope.getImage = getImage;
+    $scope.openUrl = openUrl;
+    $scope.openUrlDirect = function(url) { location.href = url; };
 
-    io.socket.post('/user/login/' + localStorage.userId, function(data, jwres) {
-      if (jwres.statusCode !== 200)
-	return alert('Eine Verbindung zum Server konnte nicht hergestellt werden. Bitte die Seite neu laden.');
-    });
-
-    /**
-     * generates random string of characters
-     */
-    function generateId() {
-      var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-      var str = '';
-      for (var i = 0; i < 32; i++){
-	str += chars[parseInt(Math.random() * chars.length)];
-      }
-
-      return str;
-    }
+    UserService.init();
 
     /**
      * positions the cards in the center of the screen in
@@ -44,13 +32,15 @@ angular.module('automatch')
     reposition();
 
     /**
-     * Returns a correctly formatted url for the image of a given car
-     * @param Object car The car to take the image from
-     * @return string The url to the image
+     * Update price boundaries and reload the cars
+     *
+     * @param min int Minimum price
+     * @param max int Maximum price
      */
-    $scope.getImage = function getImage(car) {
-      // use _27 for larger but significantly slower images
-      return 'http://' + car.images[0] + '/_8.jpg';
+    $scope.updatePriceBoundaries = function updatePriceBoundaries(min, max) {
+      $scope.suggestionCriteria.lowerPrice = min;
+      $scope.suggestionCriteria.upperPrice = max;
+      loadNewPage();
     };
 
     /**
@@ -96,17 +86,16 @@ angular.module('automatch')
     };
 
     /**
-     * Open the given url in a new tab.
+     * Sets the suggestion criteria as given by the server or disables then
      *
-     * @param String url The url to open
+     * @param enable boolean Whether to enable suggestion filter
      */
-    $scope.openUrl = function openUrl(url) {
-      window.open(url, '_blank');
-    };
-
-    $scope.toggleShowSuggestions = function toggleShowSuggestions() {
-      if ($scope.suggestionUrl) {
-	$scope.suggestionCriteria = undefined;
+    $scope.toggleShowSuggestions = function toggleShowSuggestions(enable) {
+      if (!enable) {
+	$scope.suggestionCriteria = {
+	  lowerPrice: $scope.lowerPrice,
+	  upperPrice: $scope.upperPrice
+	};
 	return;
       }
 
@@ -115,6 +104,8 @@ angular.module('automatch')
 	  if (jwres.statusCode !== 200)
 	    return alert('Vorschlägen konnten nicht geladen werden!');
 
+	  data.lowerPrice = $scope.suggestionCriteria.lowerPrice;
+	  data.upperPrice = $scope.suggestionCriteria.upperPrice;
 	  $scope.suggestionCriteria = data;
 	});
       });
@@ -163,6 +154,8 @@ angular.module('automatch')
      * Queries the CarProvider for a new page and updates the model accordingly
      */
     function loadNewPage() {
+      $scope.cars = [];
+
       CarProvider.fetchPage($scope.suggestionCriteria).then(function(data) {
 	$scope.cars = data.items.filter(function(car) {
 	  return car.numImages > 0;

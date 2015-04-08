@@ -15,21 +15,25 @@ angular.module('automatch')
      * @return Promise The promise object that will hold an array of cars on success
      */
     function fetchPage(criteria) {
-      var query;
+      var query = '';
 
-      if (criteria)
-        query =
-          '&ecol=' + criteria.color.toUpperCase() +
-          '&c=' + criteria.category +
-          '&t=' + criteria.brand +
-          '&np=' + criteria.lowerPrice + ':' + criteria.upperPrice;
-      else
-        query = '';
+      if (criteria) {
+        if (criteria.color !== undefined)
+          query += '&ecol=' + criteria.color.toUpperCase();
+        if (criteria.category !== undefined)
+          query += '&c=' + criteria.category;
+        if (criteria.brand !== undefined)
+          query += '&t=' + criteria.brand;
+        if (criteria.lowerPrice !== undefined && criteria.upperPrice !== undefined)
+          query += '&np=' + criteria.lowerPrice + ':' + criteria.upperPrice;
+      }
 
       // if we changed parameters, we no loner know how many results
       // we'll get
       if (query != prevQuery)
         maxResults = -1;
+
+      prevQuery = query;
 
       return $q(function(resolve, reject) {
         var baseUrl = 'http://m.mobile.de/svc/s/?vc=Car' + query;

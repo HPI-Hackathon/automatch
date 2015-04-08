@@ -1,11 +1,13 @@
 
-<div class="logo"></div>
+<a class="logo" target="_blank" href="http://mobile.de"></a>
 
 <div ng-controller="MainController">
   <div ng-style="{ 'background-color': action == 'like' ? 'green' : action == 'favorite' ? 'white' : 'red' }"
        class="big-button"
        ng-class="{ 'icon-thumbs-up': action == 'like', 'icon-thumbs-down': action == 'dislike', 'icon-heart': action == 'favorite' }">
   </div>
+
+  <div class="loading-indicator icon-truck" ng-show="!cars || cars.length < 1"></div>
 
   <div automatch-swipe
      like="like(car)"
@@ -32,7 +34,12 @@
   </div>
 
   <div class="automatchSidebar">
-    <slider max="a" min="a"></slider>
+    <automatch-slider onupdate="updatePriceBoundaries(min, max)" max="upperPrice" min="lowerPrice"></automatch-slider>
+    <label class="suggestions"><input automatch-touch-click-fix ng-change="toggleShowSuggestions(suggestionsOnly)" ng-model="suggestionsOnly" type="checkbox"> Vorschläge</label>
+
+    <a href="/view/favorites"
+       automatch-click="openUrlDirect('/view/favorites')"
+       class="favorites-button icon-heart"> FAVORITEN</a>
   </div>
 
   <div class="buttons-container">

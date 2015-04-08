@@ -1,5 +1,5 @@
 
-angular.module('automatch').directive('slider', ['$document', '$swipe', function($document, $swipe) {
+angular.module('automatch').directive('automatchSlider', ['$document', '$swipe', function($document, $swipe) {
   function getPos($event) {
     if ($event.clientX !== undefined)
       return {
@@ -22,9 +22,10 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
 
   return {
     restrict: 'E',
-    $scope: {
-      min: "=",
-      max: "="
+    scope: {
+      min: '&',
+      max: '&',
+      onupdate: '&'
     },
     template: '<div class="slider">' +
         '<div class="handle-upper">{{ max == MAX_VALUE ? "MAX" : max + "€" }}</div>' +
@@ -47,7 +48,7 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
 
       var lowerValMoving = false;
 
-      updatePositions();
+      updatePositions(true);
 
       $lower.add($upper)
         .bind('touchstart mousedown', function($event) {
@@ -87,8 +88,9 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
 
       /**
        * Update positions of the handle elements and the range element and the labels
+       * @param init boolean True if this is the initial placement
        */
-      function updatePositions() {
+      function updatePositions(init) {
         var lx = $scope.lowerCost - $lower.width() / 2;
         var ux = $scope.upperCost - $upper.width() / 2;
         $lower.css('left', lx + 'px');
@@ -103,7 +105,7 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
         if (!$scope.max)
           $scope.max = $scope.MAX_VALUE;
 
-        if (!$scope.$$phase)
+        if (!$scope.$$phase && !init)
           $scope.$apply();
       }
 
@@ -113,6 +115,21 @@ angular.module('automatch').directive('slider', ['$document', '$swipe', function
       function end($event) {
         $event.stopPropagation();
         $event.preventDefault();
+
+        function cb() {
+          if ($scope.onupdate)
+            $scope.onupdate({
+              min: $scope.min,
+              max: $scope.max
+            });
+        }
+
+        if ($scope.$$phase)
+          cb();
+        else
+          $scope.$apply(function() {
+            cb();
+          });
 
         $document.unbind('mousemove touchmove', move);
         $document.unbind('mouseup touchend touchcancel', end);
