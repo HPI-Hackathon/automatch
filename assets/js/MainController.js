@@ -13,7 +13,7 @@ angular.module('automatch')
     /**
      * generates random string of characters
      */
-    function generateId () {
+    function generateId() {
       var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
       var str = '';
       for (var i = 0; i < 32; i++){
@@ -102,6 +102,22 @@ angular.module('automatch')
       window.open(url, '_blank');
     };
 
+    $scope.toggleShowSuggestions = function toggleShowSuggestions() {
+      if ($scope.suggestionUrl) {
+	$scope.suggestionCriteria = undefined;
+	return;
+      }
+
+      io.socket.get('/suggestions', function(data, jwres) {
+	$scope.$apply(function() {
+	  if (jwres.statusCode !== 200)
+	    return alert('Vorschlägen konnten nicht geladen werden!');
+
+	  $scope.suggestionCriteria = data;
+	});
+      });
+    };
+
     /**
      * Send either like, favorite or dislike for the specified car and remove it
      * from the list afterwards
@@ -112,7 +128,6 @@ angular.module('automatch')
     $scope.sendAction = function sendAction(car, action) {
       // we were called from a button without direct context.
       // Show the indicator.
-      console.log(action);
       if (!car)
 	$scope.showBigButton(action);
 
@@ -138,11 +153,15 @@ angular.module('automatch')
       alert('Oh No! Something went wrong! Please reload the page.');
     });
 
+    $scope.$watch('suggestionCriteria', function(newVal) {
+      loadNewPage();
+    });
+
     /**
      * Queries the CarProvider for a new page and updates the model accordingly
      */
     function loadNewPage() {
-      CarProvider.fetchPage().then(function(data) {
+      CarProvider.fetchPage($scope.suggestionCriteria).then(function(data) {
 	$scope.cars = data.items.filter(function(car) {
 	  return car.numImages > 0;
 	}).map(function(car) {
@@ -161,7 +180,5 @@ angular.module('automatch')
 	});
       });
     }
-
-    loadNewPage();
   }]);
 

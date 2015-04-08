@@ -98,13 +98,14 @@ module.exports = {
     if (!req.session.user)
       return res.badRequest();
 
-    var upperPrice = req.param('upper') || Infinity;
-    var lowerPrice = req.param('lower') || 0;
-
     User.findOneByIdentifier(req.session.user.identifier).exec(function(err, user) {
       var attrs = ['color', 'brand', 'category'];
       var counts = {};
-      var bestFit = {};
+      var criteria = {
+        // this definitely is an acceptable magic value.
+        upperPrice: req.param('upper') || 9999999,
+        lowerPrice: req.param('lower') || 0
+      };
 
       attrs.forEach(function(attr) {
         counts[attr] = {};
@@ -138,12 +139,14 @@ module.exports = {
           }
         });
 
-        bestFit[attr] = maxKey;
+        criteria[attr] = maxKey;
       });
 
-      res.send(bestFit);
+      criteria.category = User.translateCategory(criteria.category);
+
+      res.send(criteria);
     });
-  }
+  },
 
 };
 

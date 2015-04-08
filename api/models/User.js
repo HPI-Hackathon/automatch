@@ -5,6 +5,7 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var request = require('request');
 var bcrypt = require('bcrypt');
 
 module.exports = {
@@ -83,5 +84,50 @@ module.exports = {
       next();
     });
   },
+
+  /**
+   * Loads an object mapping category names as returned by the mobile
+   * API to names as used by the mobile API
+   *
+   * @param function cb The callback to call once finished
+   */
+  loadCategoryMap: function loadCategoryMap(cb) {
+    var self = this;
+
+    request('http://m.mobile.de/svc/r/Car', {
+      headers: {
+        'Accept-Language': 'en-US,en'
+      }
+    }, function(err, res, body) {
+      if (err)
+        return cb(err);
+
+      // we want a potential exception to be fatal
+      var data = JSON.parse(body);
+
+      self.categoryMap = data.categories;
+      cb();
+    });
+  },
+
+  /**
+   * Translates a given category name to the category as used by the
+   * API. @see loadCategoryMap
+   *
+   * @param String category The category to be translated
+   * @return String         The translated category name
+   */
+  translateCategory: function translateCategory(category) {
+    var map = this.categoryMap;
+
+    for (var i = 0; i < map.length; i++) {
+      if (map[i].n == category) {
+        return map[i].i;
+      }
+    }
+  },
+
+
+
 };
 
