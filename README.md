@@ -4,7 +4,7 @@ a [Sails](http://sailsjs.org) application
 
 ## Demo
 
-Live Demo can be found [here](http://cloud.tombeckmann.de)!
+Live Demo can be found [here](http://blah.tombeckmann.de)!
 
 ![demo](https://raw.githubusercontent.com/HPI-Hackathon/automatch/master/bla.png "Demo")
 
