@@ -4,6 +4,11 @@ angular.module('automatch')
     if (!localStorage.userId)
       localStorage.userId = generateId();
 
+    io.socket.post('/user/login/' + localStorage.userId, function(data, jwres) {
+      if (jwres.statusCode !== 200)
+	return alert('Eine Verbindung zum Server konnte nicht hergestellt werden. Bitte die Seite neu laden.');
+    });
+
     /**
      * generates random string of characters
      */
@@ -45,8 +50,6 @@ angular.module('automatch')
       return 'http://' + car.images[0] + '/_8.jpg';
     };
 
-    $scope.action = 'dislike';
-
     /**
      * Plays the animation of the big button showing and hides it again
      *
@@ -67,12 +70,7 @@ angular.module('automatch')
      */
     $scope.like = function like(car) {
       console.log('Request like', car.id);
-      $scope.action = 'like';
-      $scope.cars.splice(0, 1);
-      io.socket.put('/car/like/' + car.id);
-
-      if ($scope.cars.length < 1)
-	loadNewPage();
+      $scope.sendAction(car, 'like');
     };
 
     /**
@@ -82,8 +80,25 @@ angular.module('automatch')
      */
     $scope.dislike = function dislike(car) {
       console.log('Request dislike', car.id);
+      $scope.sendAction(car, 'dislike');
+    };
+
+    /**
+     * Send either like or dislike for the specified car and remove it
+     * from the list afterwards
+     *
+     * @param Object car    The car for which to send the action
+     * @param String action The action to send, either like or dislike
+     */
+    $scope.sendAction = function sendAction(car, action) {
       $scope.cars.splice(0, 1);
-      io.socket.put('/car/dislike/' + car.id);
+      io.socket.put('/car/' + action, car, function(data, jwres) {
+	if (jwres.statusCode === 200)
+	  return;
+
+	console.log('Failed to send action:', jwres);
+	return alert('Bewertung konnte nicht abgesendet werden. Bitte die Seite neuladen.');
+      });
 
       if ($scope.cars.length < 1)
 	loadNewPage();
@@ -99,7 +114,10 @@ angular.module('automatch')
 	$scope.cars = data.items.filter(function(car) {
 	  return car.numImages > 0;
 	}).map(function(car) {
+	  console.log(car);
 	  return {
+	    color: car.attr.ecol,
+	    brand: car.title.split(' ')[0],
 	    title: car.title,
 	    category: car.category,
 	    url: car.url,

@@ -21,8 +21,9 @@
  */
 
 module.exports.routes = {
-  'PUT /car/like/:id': 'UserController.like',
-  'PUT /car/dislike/:id': 'UserController.dislike',
+  'PUT /car/like': 'UserController.like',
+  'PUT /car/dislike': 'UserController.dislike',
+  'POST /user/login/:id': 'UserController.login',
 
   '/': {
     view: 'homepage'
