@@ -1,5 +1,10 @@
 angular.module('automatch')
 .directive('automatchSidebar', ['$timeout', function($timeout) {
+  $(document.body).bind('touchstart touchend touchmove', function($event) {
+    $event.preventDefault();
+  });
+
+
   return {
     restrict: 'C',
     template: '<div class="burger icon-cog-1"></div>',
