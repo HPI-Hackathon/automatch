@@ -10,14 +10,14 @@
   display: block;
 }
 .handle-upper, .handle-lower {
-	background-color: green;
+	background-color: #37474F;
 	position: absolute;
 	cursor: pointer;
 	width: 30px;
   height: 30px;
   top: -12px;
   border-radius: 30px;
-	font-size: 20px;
+	font-size: 11px;
   z-index: 2;
   transform: translate3d(0,0,0);
   line-height: 90px;
@@ -25,7 +25,8 @@
 
 .slider{
 	position: relative;
-  background-color: lightgrey;
+  background-color:#78909C;
+  border-radius: 90px;
 }
 
 .range{
