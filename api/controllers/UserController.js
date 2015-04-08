@@ -94,6 +94,21 @@ module.exports = {
     });
   },
 
+  getFavorites: function(req, res) {
+    if (!req.session.user)
+      return res.badRequest();
+
+    User.findOneByIdentifier(req.session.user.identifier).exec(function(err, user) {
+      if (err)
+        return res.negotiate(err);
+
+      if (!user)
+        return res.notFound();
+
+      return res.send(user.favorites);
+    });
+  },
+
   getSuggestions: function(req, res) {
     if (!req.session.user)
       return res.badRequest();
